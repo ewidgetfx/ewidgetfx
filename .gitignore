@@ -4,3 +4,16 @@
 *.jar
 *.war
 *.ear
+
+.classpath
+.project
+.settings
+.DS_Store
+dist/
+target/
+*.iml
+*.ipr
+*.iws
+*.swp
+.idea
+nb-configuration.xml

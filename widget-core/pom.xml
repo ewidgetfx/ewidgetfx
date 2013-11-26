@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	
+    <groupId>org.ewidgetfx</groupId>
+    <artifactId>ewidgetfx-core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+    <name>eWidgetFX - Core</name>
+    
+	<parent>
+        <groupId>org.ewidgetfx</groupId>
+        <artifactId>ewidgetfx-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+    
+	<properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
+	<build>
+        <pluginManagement>
+            <plugins>
+			<!-- 
+				Creates an jar without dependencies (this references a libs directory containing dependencies). Allowing the user to double click to launch this application.
+
+				Build a single library:
+					mvn clean package
+				
+				Build a single library with a manifest classpath libs/ directory for jar dependencies.
+					mvn clean package dependency:copy-dependencies
+			-->
+				<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-jar-plugin</artifactId>
+				  <version>2.4</version>
+				  <configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>org.carlfx.widget.tronclock.TronClockWidget</mainClass>
+							<classpathPrefix>libs/</classpathPrefix>
+						</manifest>
+						<manifestEntries>
+							<ewidgetfx-core-name>${project.name}</ewidgetfx-core-name>
+							<ewidgetfx-core-version>${project.version}</ewidgetfx-core-version>
+							<ewidgetfx-description>The ${project.name} for application launcher and widget development.</ewidgetfx-description>
+						</manifestEntries>
+					</archive>
+				  </configuration>
+				</plugin>
+			    
+				<!-- documentation and test reports-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration><testFailureIgnore>true</testFailureIgnore></configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

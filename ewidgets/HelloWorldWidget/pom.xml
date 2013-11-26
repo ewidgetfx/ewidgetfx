@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.ewidgetfx.widget</groupId>
+    <artifactId>helloworld</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>eWidgetFX Widget - HelloWorld</name>
+
+	<parent>
+        <groupId>org.ewidgetfx</groupId>
+        <artifactId>ewidgets-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+	<properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+		<outputDirectory>${project.build.directory}</outputDirectory>
+		<main.class.driver>org.ewidgetfx.widget.helloworld.HelloWorldWidget</main.class.driver>
+    </properties>
+    <build>
+
+            <plugins>
+			<!--
+				Creates an executable jar without dependencies (this references a libs directory containing dependencies). Allowing the user to double click to launch this application.
+
+				mvn clean package dependency:copy-dependencies
+			-->
+				<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-jar-plugin</artifactId>
+				  <version>2.4</version>
+				  <configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${main.class.driver}</mainClass>
+							<classpathPrefix>jabs/libs</classpathPrefix>
+						</manifest>
+						<manifestEntries>
+                            <widget-name>Hello World</widget-name>
+                            <widget-version>${project.version}</widget-version>
+                            <!--
+                               public static enum DECORATION {
+                                    STAGED_OS_TITLE_BAR,
+                                    STAGED_CLOSE,
+                                    STAGED_CONFIG_CLOSE,
+                                    STAGED_CONFIG,
+                                    STAGED_UNDECORATED,
+                                    NON_STAGED_CLOSE,
+                                    NON_STAGED_CONFIG_CLOSE,
+                                    NON_STAGED_CONFIG,
+                                    NON_STAGED_UNDECORATED
+                                };
+                              -->
+                            <widget-decoration>STAGED_CLOSE</widget-decoration>
+                            <widget-type>WIDGET</widget-type> <!-- NATIVE_APP, WIDGET or SHELL_SCRIPT-->
+                            <widget-description>A Hello World widget.</widget-description>
+                            <widget-vendor>CarlFX</widget-vendor>
+                            <widget-vendor-url>carlfx.wordpress.com</widget-vendor-url>
+                            <widget-vendor-email></widget-vendor-email>
+                            <widget-execution-line>${main.class.driver}</widget-execution-line>
+						</manifestEntries>
+					</archive>
+				  </configuration>
+				</plugin>
+
+			<!--
+				Copies widget core into a directory libs
+
+				mvn clean package dependency:copy-dependencies
+			-->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.8</version>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+                                <excludeGroupIds>org.ewidgetfx</excludeGroupIds>
+                                <excludeArtifactIds>widget-core</excludeArtifactIds>
+								<outputDirectory>${outputDirectory}</outputDirectory>
+							</configuration>
+						</execution>
+                        <execution>
+                            <id>copy-dependencies2</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${outputDirectory}/jabs/libs</outputDirectory>
+                            </configuration>
+                        </execution>
+					</executions>
+				</plugin>
+            </plugins>
+    </build>
+    <dependencies>
+		<dependency>
+            <groupId>org.ewidgetfx</groupId>
+            <artifactId>widget-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>

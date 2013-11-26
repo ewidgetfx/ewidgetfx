@@ -1,0 +1,7 @@
+#! /bin/bash
+
+#if [[ "$OS" =~ "Windows*" ]]; then
+#    # Do stuff
+#    echo "a window machine"
+#fi
+javaw -Dprism.dirtyopts=false -jar launchtrayfx-1.0-SNAPSHOT.jar

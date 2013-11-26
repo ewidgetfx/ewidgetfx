@@ -1,0 +1,13 @@
+.toolbarHoriz {
+    -fx-background-color: rgba(0,0,0,.55);
+    -fx-padding: 0;
+    -fx-spacing: 0;
+    -fx-fill-height: true;
+}
+.toolbarVert {
+    -fx-border-width: 1;
+    -fx-background-color: rgba(0,0,0,.55);
+    -fx-padding: 0;
+    -fx-spacing: 0;
+
+}

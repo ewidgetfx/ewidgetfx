@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>org.ewidgetfx</groupId>
+    <artifactId>ewidgetfx-parent</artifactId>
+    <version>1.0</version>
+    <name>eWidgetFX - Parent</name>
+    <packaging>pom</packaging>
+        
+    <description>
+         
+    </description>
+    
+    <scm>
+        <connection>scm:git:git@github.com:ewidgetfx/core.git</connection>
+        <developerConnection>scm:git:git@github.com:ewidgetfx/core.git</developerConnection>
+        <url>https://github.com/ewidgetfx/core</url>
+    </scm>
+    
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/ewidgetfx/core/issues</url>
+    </issueManagement>
+	
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments/>
+        </license>
+    </licenses>
+	
+    <organization>
+        <name>eWidgetFX</name>
+        <url>http://ewidgetfx.github.io</url>
+    </organization>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+        <module>widget-core</module>
+        <module>app-launchers</module>
+        <module>ewidgets</module>
+    </modules>
+    
+</project>

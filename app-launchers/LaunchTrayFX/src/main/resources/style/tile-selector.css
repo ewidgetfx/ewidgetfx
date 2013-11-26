@@ -1,0 +1,47 @@
+.tile-selector {
+    -fx-skin: "org.ewidgetfx.applauncher.apptrayfx.tileselector.TileSelectorSkin";
+    -fx-text-background-color: white;
+
+}
+/*
+.tile-selector .hbox {
+    -fx-grid-lines-visible: true;
+    -fx-border-color: white;
+    -fx-border-width: 1;
+}
+*/
+.tile-selector .hbox {
+  -fx-background-color: transparent;
+  -fx-border-color: white;
+  -fx-border-width: 1;
+}
+
+.tile-selector .hbox:hover {
+    -fx-background-color: #CCFFFF;
+}
+.tile-selector .hbox:pressed {
+    -fx-background-color: #FFFFFF;
+}
+
+.tile-selector .label {
+   -fx-text-background-color: #FFFFFF;
+   /*-fx-background-color: transparent;*/
+}
+.tile-selector .label:hover{
+    -fx-text-background-color: #000000;
+    -fx-background-color: #CCFFFF;
+}
+.tile-selector .label:pressed {
+    -fx-text-background-color: #000000;
+    -fx-background-color: #FFFFFF;
+}
+
+.selected-hbox {
+   -fx-background-color: #FFFFFF;
+   -fx-border-color: white;
+   -fx-border-width: 1;
+}
+.selected-label{
+   -fx-text-background-color: #000000;
+   -fx-background-color: #FFFFFF;
+}

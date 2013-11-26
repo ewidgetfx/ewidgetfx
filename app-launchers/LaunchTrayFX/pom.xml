@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.ewidgetfx.applauncher</groupId>
+    <artifactId>launchtrayfx</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>eWidgetFX - LaunchTrayFX</name>
+    
+	<parent>
+        <groupId>org.ewidgetfx</groupId>
+        <artifactId>applauncher-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+	<properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+		<outputDirectory>${project.build.directory}</outputDirectory>
+        <main.class.driver>org.ewidgetfx.applauncher.apptrayfx.Main2</main.class.driver>
+	 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+
+<!--
+How to build LaunchTrayFX as a jar executable in Maven:
+mvn clean package assembly:single
+
+
+The target directory will output the jar executable called (launchtrayfx-<version>.jar). 
+A libs directory will also be created containing jar dependencies such as widget-core-<version>.jar
+-->
+    <build>
+
+            <plugins>
+
+
+
+			<!-- 
+				Creates an executable jar without dependencies (this references a libs directory containing dependencies). Allowing the user to double click to launch this application.
+
+				mvn clean package dependency:copy-dependencies
+			-->
+				<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-jar-plugin</artifactId>
+				  <version>2.4</version>
+				  <configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${main.class.driver}</mainClass>
+                            <classpathPrefix>jabs/libs</classpathPrefix>
+						</manifest>
+						<manifestEntries>
+							<widget-launcher-name>${project.name}</widget-launcher-name>
+							<widget-launcher-version>${project.version}</widget-launcher-version>
+							<widget-launcher-description>A desktop widget framework to launch apps, widgets, and scripts</widget-launcher-description>
+						</manifestEntries>
+					</archive>
+				  </configuration>
+				</plugin>
+
+			<!-- 
+				Copies widget core into a directory libs
+				
+				mvn clean package dependency:copy-dependencies
+			-->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.8</version>
+					<executions>
+                        <execution>
+                            <id>copy-dependencies</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${outputDirectory}/classes</outputDirectory>
+                            </configuration>
+                        </execution>
+						<execution>
+							<id>copy-dependencies2</id>
+							<phase>package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${outputDirectory}/jabs/libs</outputDirectory>
+							</configuration>
+						</execution>
+
+					</executions>
+				</plugin>
+
+				<!-- documentation and test reports-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration><testFailureIgnore>true</testFailureIgnore></configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.gmaven</groupId>
+                    <artifactId>gmaven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>execute</goal>
+                            </goals>
+                            <configuration>
+                                <source>
+                                    if (project.packaging != 'pom') {
+                                        log.info('Copying some stuff...')
+
+                                        def dir = new File(project.basedir, 'target')
+                                        ant.mkdir(dir: dir)
+                                        ant.copy(todir: dir) {
+                                            fileset(dir: project.basedir) {
+                                                include(name: 'trayfx.bat')
+                                                include(name: 'trayfx')
+                                            }
+                                        }
+                                    }
+                                </source>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>2.3.2</version>
+              <configuration>
+               <encoding>${project.build.sourceEncoding}</encoding>
+              </configuration>
+             </plugin>
+             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-resources-plugin</artifactId>
+              <version>2.4.3</version>
+              <configuration>
+               <encoding>${project.build.sourceEncoding}</encoding>
+              </configuration>
+             </plugin>
+            </plugins>
+    </build>
+    <dependencies>
+		<dependency>
+            <groupId>org.ewidgetfx</groupId>
+            <artifactId>widget-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
