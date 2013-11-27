@@ -27,6 +27,7 @@ import org.ewidgetfx.core.WidgetStage;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -34,6 +35,8 @@ import java.util.HashMap;
  * @since 1.0
  */
 public class WidgetFactory {
+
+    private static final Logger logger = Logger.getLogger(WidgetFactory.class);
 
     static WidgetLoader widgetLoader = new WidgetLoaderImpl(new File(new File(".").getAbsoluteFile().getParentFile() + File.separator + "jabs"));
 
@@ -93,7 +96,7 @@ public class WidgetFactory {
                         widgetStage = new WidgetStage(primaryStage, w);
                         w.init();
                     }
-                    System.out.println("started prop: " + w.getWidgetState().getStartedProperty());
+                    logger.info("started prop: " + w.getWidgetState().getStartedProperty());
                     if (!w.getWidgetState().startedPropertyProperty().get()) {
 
                         // 4. start the widget

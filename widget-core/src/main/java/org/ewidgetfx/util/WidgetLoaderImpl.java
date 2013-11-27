@@ -39,6 +39,7 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -46,6 +47,8 @@ import java.util.stream.Stream;
  * @since 1.0
  */
 public class WidgetLoaderImpl implements WidgetLoader {
+
+    private static final Logger logger = Logger.getLogger(WidgetLoaderImpl.class);
 
     File widgetDir = null;
     public static final String JABS_DIRECTORY = "jabs";
@@ -158,8 +161,8 @@ public class WidgetLoaderImpl implements WidgetLoader {
                 widgetIcon.setOnMouseClicked(WidgetFactory.createLaunchWidgetEventHandler(containerStage, w));
 
             }
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException e1) {
+            logger.error("Exceptionw when loading Widgets ", e1);
         }
         return widgetProxy;
     }
@@ -213,30 +216,30 @@ public class WidgetLoaderImpl implements WidgetLoader {
             java.io.FileOutputStream fos = null;
             try {
                 is = jabFile.getInputStream(jarEntry);
-                
+
                 try {
                     fos = new java.io.FileOutputStream(tmpJar);
-                    
+
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    logger.error("File not found ", e);
                 }
                 while (is.available() > 0) {  // write contents of 'is' to 'fos'
                     fos.write(is.read());
                 }
                 // flush bytes to disk
                 fos.flush();
-                
+
                 fos.close();
                 is.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("IO exception ", e);
             } finally {
                 try {
 
                     fos.close();
                     is.close();
                 } catch (Exception e) {
-                    //e.printStackTrace();
+                    logger.error("Exception when finally ", e);
                     fos = null;
                     is = null;
                 }

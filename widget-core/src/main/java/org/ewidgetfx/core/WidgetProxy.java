@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -26,6 +27,8 @@ import java.util.Date;
  * @since 1.0
  */
 public class WidgetProxy implements InvocationHandler {
+
+    private static final Logger logger = Logger.getLogger(WidgetProxy.class);
 
     private final Widget realWidget;
 
@@ -35,13 +38,11 @@ public class WidgetProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-        Object returnObj = null;
+        Object returnObj;
         try {
             returnObj = method.invoke(realWidget, args);
-        } catch (Exception e) {
-            ((InvocationTargetException) e).getTargetException().printStackTrace();
-            e.printStackTrace();
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            logger.error("Exception raised when invoking proxy ", e);
             return null;
         }
         String methodName = method.getName();
@@ -79,7 +80,7 @@ public class WidgetProxy implements InvocationHandler {
                 break;
 
         }
-        System.out.println(new Date() + " " + realWidget.getName() + " widget's " + method.getName() + "() method was invoked ");
+        logger.info(new Date() + " " + realWidget.getName() + " widget's " + method.getName() + "() method was invoked ");
 
         return returnObj;
     }
