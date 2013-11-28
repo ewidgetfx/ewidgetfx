@@ -32,6 +32,7 @@ import org.ewidgetfx.util.WidgetFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -39,37 +40,39 @@ import java.util.Collection;
  * @since 1.0
  */
 public class AppTray extends Pane {
-
+    
+    private static final Logger logger = Logger.getLogger(AppTray.class);
+    
     Stage primaryStage;
     ObservableList<WidgetIcon> widgetIcons = FXCollections.observableList(new ArrayList<WidgetIcon>());
     String[][] icons;
-
+    
     public AppTray(Stage primaryStage, String[][] icons) {
         this.primaryStage = primaryStage;
         this.icons = icons;
-
+        
     }
-
+    
     public AppTray(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
-
+    
     public ObservableList<WidgetIcon> getWidgetIcons() {
         return widgetIcons;
     }
-
+    
     public void setWidgetIcons(ObservableList<WidgetIcon> widgetIcons) {
         this.widgetIcons = widgetIcons;
     }
-
+    
     protected ObservableList<WidgetIcon> buildIcons2(Stage parent, Dimension2D iconSize, final Text appNameText) {
 
         // read in all of the jab files.
         // search directory for jab files
         File widgetsDir = new File(new File(".").getAbsoluteFile().getParentFile() + File.separator + "jabs");
-
+        
         WidgetFactory.loadWidgets(widgetsDir, ".*\\.jar$", parent, this.getClass().getClassLoader());
-
+        
         Collection<Widget> widgetCollection = WidgetFactory.retrieveAll();
         widgetCollection.forEach(widget -> {
             WidgetIcon widgetIcon = widget.getWidgetIcon();
@@ -84,22 +87,22 @@ public class AppTray extends Pane {
         //*
         //* Below is for demos only
         for (String[] icon : icons) {
-
+            
             Class clazz = null;
             Widget widget = null;
             if (icon[1] != null && icon[1].trim().length() > 0) {
                 try {
                     clazz = Class.forName(icon[1]);
                     widget = (Widget) clazz.newInstance();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                    logger.error("Exception in buildIcons2 when initializing widget", e);
                 }
             }
             Node tile = null;
             WidgetIcon widgetIcon = null;
             SVGPath svgPath = null;
-
+            
             if (widget != null) {
                 widgetIcon = widget.getWidgetIcon();
             } else {
@@ -107,7 +110,7 @@ public class AppTray extends Pane {
                 svgPath.setContent(icon[2]);
                 svgPath.autosize();
                 svgPath.setFill(Color.WHITE);
-
+                
                 widgetIcon = new WidgetIcon(svgPath);
             }
 
@@ -115,7 +118,7 @@ public class AppTray extends Pane {
             widgetIcon.setOnMouseEntered(me -> {
                 appNameText.setText(icon[0]);
             });
-
+            
             widgetIcon.setOnMouseExited(me -> {
                 appNameText.setText("");
             });
@@ -141,16 +144,16 @@ public class AppTray extends Pane {
             widgetIcon.setAlignment(Pos.CENTER);
             getWidgetIcons().add(widgetIcon);
         }
-
+        
         return getWidgetIcons();
     }
-
+    
     public void sizeWidgetIcon(Widget widget, Dimension2D iconSize, Text displayText) {
         WidgetIcon widgetIcon = widget.getWidgetIcon();
         widgetIcon.setOnMouseEntered(me -> {
             displayText.setText(widget.getName());
         });
-
+        
         widgetIcon.setOnMouseExited(me -> {
             displayText.setText("");
         });

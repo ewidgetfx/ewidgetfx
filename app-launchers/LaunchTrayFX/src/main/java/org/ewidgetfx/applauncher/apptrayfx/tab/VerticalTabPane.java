@@ -24,6 +24,7 @@ import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -31,6 +32,8 @@ import java.util.List;
  * @since 1.0
  */
 public class VerticalTabPane extends StackPane {
+
+    private static final Logger logger = Logger.getLogger(VerticalTabPane.class);
 
     public static enum Side {
 
@@ -53,14 +56,14 @@ public class VerticalTabPane extends StackPane {
         setPrefHeight(prefHeight);
         // when user mouse pressed the app icon.
         filterMousePressed = (mouseEvent) -> {
-            //System.out.println(mouseEvent);
+         
             //if (mouseEvent.getSource() instanceof VerticalTab) {
             Point2D pt = new Point2D(mouseEvent.getX(), mouseEvent.getY());
             tabs.stream().filter((tab) -> (tab.getTabRectangle().contains(pt) && mouseEvent.getX() < VerticalTab.TAB_WIDTH)).filter((tab) -> (selectIndex != tab.getSelectIndex())).map((tab) -> {
                 tabList.get(selectIndex).unselect();
                 return tab;
             }).map((tab) -> {
-                System.out.println("Selected: " + tab.getName());
+                logger.info("Selected: " + tab.getName());
                 return tab;
             }).map((tab) -> {
                 selectIndex = tab.getSelectIndex();

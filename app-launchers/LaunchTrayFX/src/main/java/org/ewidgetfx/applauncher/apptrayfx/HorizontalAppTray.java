@@ -37,7 +37,7 @@ import java.util.List;
  * @author Carl Dea <carl.dea@gmail.com>
  * @since 1.0
  */
-public class HorizontalAppTray extends AppTray {
+public final class HorizontalAppTray extends AppTray {
 
     public HorizontalAppTray(Stage primaryStage, String[][] icons) {
         super(primaryStage, icons);

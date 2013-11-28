@@ -48,13 +48,11 @@ public class DragStagePane extends Pane {
         if (filterEvents.get()) {
             e.consume();
         }
-        System.out.println(e);
     };
     protected EventHandler<MouseEvent> mouseExit = e ->  {
         if (filterEvents.get()) {
             e.consume();
         }
-        System.out.println(e);
     };
     protected EventHandler<MouseEvent> mousePressed = e -> {
         if (filterEvents.get()) {
@@ -66,7 +64,6 @@ public class DragStagePane extends Pane {
         if (filterEvents.get()) {
             e.consume();
         }
-        System.out.println(e);
     };
     protected EventHandler<MouseEvent> mouseDragged = e -> {
         dragging = true;

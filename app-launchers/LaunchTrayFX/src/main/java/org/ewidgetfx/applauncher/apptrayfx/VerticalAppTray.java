@@ -51,6 +51,7 @@ import org.ewidgetfx.util.DragStagePane;
 import org.ewidgetfx.util.WidgetFactory;
 
 import java.util.*;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -58,6 +59,8 @@ import java.util.*;
  * @since 1.0
  */
 public final class VerticalAppTray extends AppTray {
+    
+    private static final Logger logger = Logger.getLogger(VerticalAppTray.class);
 
     private VBox vBox;
     Text appNameText;
@@ -158,7 +161,7 @@ public final class VerticalAppTray extends AppTray {
                         if (w == null) {
                             return;
                         }
-                        System.out.println("widget " + w);
+                        logger.info("widget " + w);
                         // if a widget was closed remove them from the workspace.
                         w.getWidgetState().stopPropertyProperty().addListener((ChangeListener) (observableValue, aBoolean, aBoolean2) -> {
 
@@ -171,7 +174,7 @@ public final class VerticalAppTray extends AppTray {
                         });
 
                         icon.addEventHandler(MouseEvent.MOUSE_CLICKED, (EventHandler) (mouseEvent) -> {
-                            System.out.println("setting workspace " + icon.getWidgetFilename());
+                            logger.info("setting workspace " + icon.getWidgetFilename());
                             // this check if a widget is already in a workspace.
                             boolean found = false;
                             for (Set<Widget> workspace : workspaceWidgetMap.values()) {
@@ -231,10 +234,10 @@ public final class VerticalAppTray extends AppTray {
 
             // move widget's out of view.
             workspaceWidgetMap.get(oldNumber.intValue()).forEach((Widget widget) -> {
-                System.out.println(widget.getName() + " in workspace " + oldNumber);
+                logger.info(widget.getName() + " in workspace " + oldNumber);
                 // save current location
                 Stage widgetStage = widget.getParentStage();
-                System.out.println("moving out code: stage: " + widgetStage.hashCode());
+                logger.info("moving out code: stage: " + widgetStage.hashCode());
                 double x = widgetStage.getX();
                 double y = widgetStage.getY();
                 WidgetInfo widgetInfo = widgetWidgetInfoMap.get(widget);
@@ -281,9 +284,9 @@ public final class VerticalAppTray extends AppTray {
             });
             moveOutTimeline.getKeyFrames().addAll(moveWindowsOut);
 
-            System.out.println("workspace selected: " + newNumber);
-            workspaceWidgetMap.get(newNumber.intValue()).forEach((Widget widget) -> {
-                System.out.println(widget.getName() + " in workspace " + newNumber);
+            logger.info("workspace selected: " + newNumber);
+            workspaceWidgetMap.get(newNumber.intValue()).forEach((widget) -> {
+                logger.info(widget.getName() + " in workspace " + newNumber);
 
                 WidgetInfo widgetInfo = widgetWidgetInfoMap.get(widget);
                 KeyValue keyValue = new KeyValue(widgetInfo.currentYProperty(), widgetInfo.getSavedY());

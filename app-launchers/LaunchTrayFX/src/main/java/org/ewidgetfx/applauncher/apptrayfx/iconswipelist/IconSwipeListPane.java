@@ -36,7 +36,7 @@ import javafx.util.Duration;
  * @author Carl Dea <carl.dea@gmail.com>
  * @since 1.0
  */
-public class IconSwipeListPane extends Group {
+public final class IconSwipeListPane extends Group {
 
     public static enum SwipeAxis {
 
@@ -57,7 +57,7 @@ public class IconSwipeListPane extends Group {
     protected EventHandler<MouseEvent> filterMousePressed;
     protected EventHandler<MouseEvent> filterMouseDragged;
     protected EventHandler<MouseEvent> filterMouseReleased;
-    private IconSwipeListInfo iconSwipeListInfo;
+    private final IconSwipeListInfo iconSwipeListInfo;
 
     public IconSwipeListPane(IconSwipeListInfo iconSwipeListInfo, Pane iconList, SwipeAxis swipeAxis) {
         this.iconSwipeListInfo = iconSwipeListInfo;
@@ -95,7 +95,6 @@ public class IconSwipeListPane extends Group {
                     dragDelta.set(scroll.subtract(prevY).doubleValue());
                 }
             }
-            //System.out.println("Mouse dragged " + mouseEvent);
         };
 
         // when the user finishes dragging and releases (inertia)
@@ -114,7 +113,6 @@ public class IconSwipeListPane extends Group {
 
             dragDelta.set(0);
             buttonDown.set(false);
-            //System.out.println("Mouse released " + mouseEvent);
         };
 
         // bind scrollY property
@@ -124,20 +122,18 @@ public class IconSwipeListPane extends Group {
             scrollListener = (observableValue, number, number2) -> {
                 if (iconList != null) {
                     iconList.setTranslateX(0 - number2.doubleValue());
-                    //System.out.println("iconList.getTranslateY() = " + iconList.getTranslateY());
+
                 }
             };
         } else {
             scrollListener = (observableValue, number, number2) -> {
                 if (iconList != null) {
                     iconList.setTranslateY(0 - number2.doubleValue());
-                    //System.out.println("iconList.getTranslateY() = " + iconList.getTranslateY());
                 }
             };
             scroll.addListener((observableValue, number, number2) -> {
                 if (iconList != null) {
                     iconList.setTranslateY(0 - number2.doubleValue());
-                    //System.out.println("iconList.getTranslateY() = " + iconList.getTranslateY());
                 }
             });
         }

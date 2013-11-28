@@ -238,7 +238,7 @@ public class WidgetLoaderImpl implements WidgetLoader {
 
                     fos.close();
                     is.close();
-                } catch (Exception e) {
+                } catch (IOException e) {
                     logger.error("Exception when finally ", e);
                     fos = null;
                     is = null;

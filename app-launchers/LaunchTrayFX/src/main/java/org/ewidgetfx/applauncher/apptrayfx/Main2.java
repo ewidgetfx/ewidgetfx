@@ -18,7 +18,6 @@ package org.ewidgetfx.applauncher.apptrayfx;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -37,11 +36,11 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -49,6 +48,8 @@ import java.util.stream.Stream;
  * @since 1.0
  */
 public class Main2 extends Application {
+
+    private static final Logger logger = Logger.getLogger(Main2.class);
 
     public static final String JABS_DIRECTORY = "jabs";
     public static final String LIBS_DIRECTORY = "libs";
@@ -64,12 +65,12 @@ public class Main2 extends Application {
         if (os.toLowerCase().indexOf("win") > -1) {
             System.setProperty("prism.dirtyopts", "false");
         }
-        System.out.println(">>>" + System.getProperty("os.name"));
+        logger.info(">>>" + System.getProperty("os.name"));
 
         try {
             String absoluteName = Main2.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
 
-            System.out.println("jar name: " + absoluteName);
+            logger.info("jar name: " + absoluteName);
             // if run as a jar check for jabs/libs/ if not create
             if (absoluteName.endsWith(".jar")) {
                 File selfJar = new File(Main2.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -87,7 +88,6 @@ public class Main2 extends Application {
                 // determine if jabs/libs/widget-core.jar exists
 //                int startInd = absoluteName.lastIndexOf("/");
 //                String simpleJarName = absoluteName.substring(startInd);
-//                System.out.println("simple jar name: " + simpleJarName);
                 // if not extract into the directory
 
                 bootstrapAndExtractWidgetCore(selfJar);
@@ -96,7 +96,7 @@ public class Main2 extends Application {
             }
 
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("Exception main while reading jar ", e);
         }
 
         Application.launch(args);
@@ -141,19 +141,16 @@ public class Main2 extends Application {
         primaryStage.show();
         primaryStage.toFront();
         primaryStage.requestFocus();
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                Collection<Widget> widgets = WidgetFactory.retrieveAll();
-                // TODO: kill long running stop() methods.
-                // DANGER this could block so create a timeout thread for each.
-                for (Widget w : widgets) {
-                    w.stop();
-                    w.stopBackground();
-                }
-                Platform.exit();
-                System.exit(0);
-            }
+        primaryStage.setOnCloseRequest((WindowEvent windowEvent) -> {
+            Collection<Widget> widgets = WidgetFactory.retrieveAll();
+            widgets.stream().map((w) -> {
+                w.stop();
+                return w;
+            }).forEach((w) -> {
+                w.stopBackground();
+            });
+            Platform.exit();
+            System.exit(0);
         });
 
         // spawn off widget directory watcher to install new widgets
@@ -164,67 +161,58 @@ public class Main2 extends Application {
 
     protected void dragToInstallWidgetEvents(Stage primaryStage, VerticalAppTray verticalAppTray) {
         Scene mainScene = primaryStage.getScene();
-        mainScene.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                System.out.println("drag " + dragEvent);
-                Dragboard db = dragEvent.getDragboard();
-                if (db.hasFiles()) {
-                    dragEvent.acceptTransferModes(TransferMode.COPY);
-                } else {
-                    dragEvent.consume();
-                }
-            }
-        });
-        mainScene.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                System.out.println("dropped " + dragEvent);
-                Dragboard db = dragEvent.getDragboard();
-                boolean success = false;
-                if (db.hasFiles()) {
-                    success = true;
-                    String filePath = null;
-
-                    File widgetDir = getWidgetDirectory();
-
-                    final File destJabsDir = widgetDir;
-                    for (File file : db.getFiles()) {
-                        filePath = file.getAbsolutePath();
-                        System.out.println("file: " + filePath);
-                        // detect if it is a eWidgetFX
-                        Widget widget = WidgetFactory.lookup(file.getName());
-                        if (widget == null) {
-                            widget = WidgetFactory.loadFile(file, primaryStage, ClassLoader.getSystemClassLoader());
-                            if (widget != null) {
-                                WidgetFactory.update(file.getName(), widget);
-                                System.out.println("Adding to the icon tray");
-                                verticalAppTray.addIconToTray(widget);
-                                Task<Void> copy = new Task<Void>() {
-                                    @Override
-                                    protected Void call() throws Exception {
-                                        File dest = new File(destJabsDir.getAbsolutePath() + File.separator + file.getName());
-
-                                        copyFile(file, dest);
-                                        return null;
-                                    }
-                                };
-                                new Thread(copy).start();
-                            }
-
-                        }
-
-                    }
-                }
-                dragEvent.setDropCompleted(success);
+        mainScene.setOnDragOver((DragEvent dragEvent) -> {
+            logger.info("drag " + dragEvent);
+            Dragboard db = dragEvent.getDragboard();
+            if (db.hasFiles()) {
+                dragEvent.acceptTransferModes(TransferMode.COPY);
+            } else {
                 dragEvent.consume();
             }
         });
-        mainScene.setOnDragDone(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                System.out.println("dragdone " + dragEvent);
+        mainScene.setOnDragDropped((DragEvent dragEvent) -> {
+            logger.info("dropped " + dragEvent);
+            Dragboard db = dragEvent.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+                String filePath = null;
+
+                File widgetDir = getWidgetDirectory();
+
+                final File destJabsDir = widgetDir;
+                for (File file : db.getFiles()) {
+                    filePath = file.getAbsolutePath();
+                    logger.info("file: " + filePath);
+                    // detect if it is a eWidgetFX
+                    Widget widget = WidgetFactory.lookup(file.getName());
+                    if (widget == null) {
+                        widget = WidgetFactory.loadFile(file, primaryStage, ClassLoader.getSystemClassLoader());
+                        if (widget != null) {
+                            WidgetFactory.update(file.getName(), widget);
+                            logger.info("Adding to the icon tray");
+                            verticalAppTray.addIconToTray(widget);
+                            Task<Void> copy = new Task<Void>() {
+                                @Override
+                                protected Void call() throws Exception {
+                                    File dest = new File(destJabsDir.getAbsolutePath() + File.separator + file.getName());
+
+                                    copyFile(file, dest);
+                                    return null;
+                                }
+                            };
+                            new Thread(copy).start();
+                        }
+
+                    }
+
+                }
             }
+            dragEvent.setDropCompleted(success);
+            dragEvent.consume();
+        });
+        mainScene.setOnDragDone((DragEvent dragEvent) -> {
+            logger.info("dragdone " + dragEvent);
         });
     }
 
@@ -235,7 +223,7 @@ public class Main2 extends Application {
         try {
             selfJar = new File(Main2.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("Exception in getWidgetDirectory when reading self jar. ", e);
         }
 
         String absoluteFile = selfJar.getAbsolutePath();
@@ -282,7 +270,7 @@ public class Main2 extends Application {
 
             // load jar dependencies
             String classpathStr = jabFile.getManifest().getMainAttributes().getValue("Class-Path");
-            System.out.println("classpath = " + classpathStr);
+            logger.info("classpath = " + classpathStr);
             String[] jarsDeps = null;
             if (classpathStr != null) {
                 jarsDeps = classpathStr.split("\\s+");
@@ -295,7 +283,7 @@ public class Main2 extends Application {
 
             URL[] urls = new URL[numJars];
             for (int i = 0; i < jarsDeps.length; i++) {
-                System.out.println("jar deps: " + jarsDeps[i]);
+                logger.info("jar deps: " + jarsDeps[i]);
 
                 File jarFileDep = new File(new File(".").getAbsoluteFile().getParentFile() + File.separator + jarsDeps[i]);
 
@@ -308,8 +296,8 @@ public class Main2 extends Application {
             Thread.currentThread().setContextClassLoader(child);
 
             //Class classToLoad = Class.forName(clazzName, true, child);
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (IOException e1) {
+            logger.error("Exception in bootstrapAndExtractWidgetCore ", e1);
         }
     }
 
@@ -351,7 +339,7 @@ public class Main2 extends Application {
             deps.add(simpleName);
         }
         if (deps.isEmpty()) {
-            System.out.println("All dependencies already exist jabs/libs");
+            logger.info("All dependencies already exist jabs/libs");
             return;
         }
         Stream<JarEntry> files = jabFile.stream().filter((Predicate) (jarEntry) -> {
@@ -359,46 +347,42 @@ public class Main2 extends Application {
             return (!je.isDirectory() && deps.contains(je.getName()));
         });
 
-        files.forEach(new Consumer<JarEntry>() {
-            @Override
-            public void accept(JarEntry jarEntry) {
+        files.forEach((JarEntry jarEntry) -> {
+            File tmpJar = new File(libsDir.getAbsolutePath() + File.separator + jarEntry.getName());
+            if (tmpJar.exists()) {
+                return;
+            }
+            logger.info("Loading... " + tmpJar);
+            java.io.InputStream is = null; // get the input stream
+            java.io.FileOutputStream fos = null;
+            try {
+                is = jabFile.getInputStream(jarEntry);
 
-                File tmpJar = new File(libsDir.getAbsolutePath() + File.separator + jarEntry.getName());
-                if (tmpJar.exists()) {
-                    return;
-                }
-                System.out.println("Loading... " + tmpJar);
-                java.io.InputStream is = null; // get the input stream
-                java.io.FileOutputStream fos = null;
                 try {
-                    is = jabFile.getInputStream(jarEntry);
+                    fos = new java.io.FileOutputStream(tmpJar);
 
-                    try {
-                        fos = new java.io.FileOutputStream(tmpJar);
+                } catch (FileNotFoundException e) {
+                    logger.error("Exception in installDependencies when reading tmpjar", e);
+                }
+                while (is.available() > 0) {  // write contents of 'is' to 'fos'
+                    fos.write(is.read());
+                }
+                // flush bytes to disk
+                fos.flush();
 
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    while (is.available() > 0) {  // write contents of 'is' to 'fos'
-                        fos.write(is.read());
-                    }
-                    // flush bytes to disk
-                    fos.flush();
+                fos.close();
+                is.close();
+            } catch (IOException e) {
+                logger.error("Exception in installDependencies ", e);
+            } finally {
+                try {
 
                     fos.close();
                     is.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-
-                        fos.close();
-                        is.close();
-                    } catch (Exception e) {
-                        //e.printStackTrace();
-                        fos = null;
-                        is = null;
-                    }
+                    //e.printStackTrace();
+                    fos = null;
+                    is = null;
                 }
             }
         });
@@ -424,12 +408,12 @@ public class Main2 extends Application {
                         WatchKey watchKey = watcher.take();
                         spawnWatcher(watchKey, primaryStage, verticalAppTray);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.error("Exception in createWidgetDirectoryInstallWatcherThread ", e);
                     }
                 }
 
-            } catch (Exception e) {
-                System.out.println("Error: " + e.toString());
+            } catch (IOException e) {
+                logger.error("Exception in createWidgetDirectoryInstallWatcherThread ", e);
 
             }
         };
@@ -468,10 +452,10 @@ public class Main2 extends Application {
                 }
             }
             if (event.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
-                System.out.println("Delete: " + event.context().toString());
+                logger.info("Delete: " + event.context().toString());
             }
             if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
-                System.out.println("Modify: " + event.context().toString());
+                logger.info("Modify: " + event.context().toString());
             }
             watchKey.reset();
         }

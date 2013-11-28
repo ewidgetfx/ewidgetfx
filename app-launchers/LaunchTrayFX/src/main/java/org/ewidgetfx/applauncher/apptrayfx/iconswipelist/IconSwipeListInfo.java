@@ -26,9 +26,9 @@ import javafx.scene.shape.Rectangle;
  */
 public class IconSwipeListInfo {
 
-    private DoubleProperty width = new SimpleDoubleProperty();
-    private DoubleProperty height = new SimpleDoubleProperty();
-    private Rectangle scrollViewPort = new Rectangle();
+    private final DoubleProperty width = new SimpleDoubleProperty();
+    private final DoubleProperty height = new SimpleDoubleProperty();
+    private final Rectangle scrollViewPort = new Rectangle();
 
     public double getWidth() {
         return width.get();
