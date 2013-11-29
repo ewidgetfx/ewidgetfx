@@ -34,8 +34,6 @@ public class LaunchInfo {
     public LaunchInfo() {
     }
 
-    ;
-
     public LaunchInfo(String executionLine, LaunchType launchType, Widget widget) {
         this.executionLine = executionLine;
         this.launchType = launchType;

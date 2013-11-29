@@ -180,23 +180,11 @@ public abstract class DefaultWidget extends Pane implements Widget {
         return widgetState;
     }
 
-//    @Override
-//    public WidgetIcon buildWidgetIcon() {
-//        return null;  //To change body of implemented methods use File | Settings | File Templates.
-//    }
     @Override
     public void startBackground() {
 
     }
 
-//    @Override
-//    public void init() {
-//        System.out.println("initialize widget");
-//    }
-//        @Override
-//    public void start() {
-//        System.out.println("starting widget");
-//    }
     @Override
     public void pause() {
         System.out.println("pausing widget");
@@ -207,10 +195,6 @@ public abstract class DefaultWidget extends Pane implements Widget {
         System.out.println("resuming widget");
     }
 
-//    @Override
-//    public void stop() {
-//        System.out.println("stopping widget");
-//    }
     @Override
     public void stopBackground() {
 
