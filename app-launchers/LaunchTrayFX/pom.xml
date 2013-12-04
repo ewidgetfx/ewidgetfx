@@ -17,11 +17,8 @@
     </parent>
 
 	<properties>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-		<outputDirectory>${project.build.directory}</outputDirectory>
+	<outputDirectory>${project.build.directory}</outputDirectory>
         <main.class.driver>org.ewidgetfx.applauncher.apptrayfx.Main2</main.class.driver>
-	 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 

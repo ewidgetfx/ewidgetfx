@@ -48,6 +48,21 @@
         <url>http://ewidgetfx.github.io</url>
     </organization>
     
+    <developers>
+        <developer>
+            <id>carlfx</id>
+            <name>Carl Dea</name>
+            <email>carl.dea@gmail.com</email>
+            <url>http://carlfx.wordpress.com</url>
+            <organization>eWidgetFX</organization>
+            <organizationUrl></organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+    
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
@@ -72,6 +87,8 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <debug>false</debug>
+                    <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
         </plugins>

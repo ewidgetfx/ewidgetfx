@@ -35,7 +35,7 @@ import java.util.Set;
  * @author Carl Dea <carl.dea@gmail.com>
  * @since 1.0
  */
-public class DragStagePane extends Pane {
+public final class DragStagePane extends Pane {
     private Point2D anchorPt;
     private Point2D previousLocation;
     private Stage draggableStage;

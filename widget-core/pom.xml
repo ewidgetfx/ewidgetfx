@@ -76,6 +76,29 @@
                         <testFailureIgnore>true</testFailureIgnore>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <configuration>
+                        <!-- Default configuration for all reports -->
+                        <outputDirectory>${project.build.directory}/javadoc/${project.version}</outputDirectory>
+                        <reportOutputDirectory>${project.build.directory}/javadoc/${project.version}</reportOutputDirectory>
+                        <destDir>${project.build.directory}/javadoc/${project.version}</destDir>
+                        <failOnError>false</failOnError>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>aggregate</id>
+                            <goals>
+                                <goal>aggregate</goal>
+                            </goals>
+                            <phase>site</phase>
+                            <configuration>
+                                <!-- Specific configuration for the aggregate report -->
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
