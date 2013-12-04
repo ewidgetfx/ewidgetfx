@@ -26,16 +26,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
-import javafx.scene.effect.DropShadowBuilder;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.RectangleBuilder;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBuilder;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -51,6 +48,7 @@ import org.ewidgetfx.util.DragStagePane;
 import org.ewidgetfx.util.WidgetFactory;
 
 import java.util.*;
+import javafx.scene.effect.DropShadow;
 import org.apache.log4j.Logger;
 
 /**
@@ -59,7 +57,7 @@ import org.apache.log4j.Logger;
  * @since 1.0
  */
 public final class VerticalAppTray extends AppTray {
-    
+
     private static final Logger logger = Logger.getLogger(VerticalAppTray.class);
 
     private VBox vBox;
@@ -108,18 +106,17 @@ public final class VerticalAppTray extends AppTray {
     }
 
     private VerticalTab createTab1(VerticalTabPane tabPane) {
-        appNameText = TextBuilder.create()
-                .x(5)
-                .y(140)
-                .fill(Color.YELLOW)
-                .effect(DropShadowBuilder.create()
-                        .offsetX(2.0)
-                        .offsetY(2.0)
-                        .color(Color.rgb(50, 50, 50, .588))
-                        .build()
-                )
-                .font(Font.font("Serif", 20))
-                .build();
+
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setOffsetX(USE_PREF_SIZE);
+        dropShadow.setOffsetY(USE_PREF_SIZE);
+        dropShadow.setColor(Color.rgb(50, 50, 50, .588));
+
+        appNameText = new Text(5, 140, "");
+        appNameText.setFill(Color.YELLOW);
+        appNameText.setEffect(dropShadow);
+        appNameText.setFont(Font.font("Serif", 20));
+
         ObservableList<WidgetIcon> nodes = buildIcons2(primaryStage, iconDim, appNameText);
 
         // Vertical
@@ -199,11 +196,7 @@ public final class VerticalAppTray extends AppTray {
         dragStagePane.setLayoutX(60);
         dragStagePane.setLayoutY(10);
 
-        Rectangle whiteRectangle = RectangleBuilder.create()
-                .fill(Color.rgb(255, 255, 255, .30))
-                .width(200 - 50 - 20)
-                .height(300 - 20)
-                .build();
+        Rectangle whiteRectangle = new Rectangle(200 - 50 - 20,300 - 20,Color.rgb(255, 255, 255, .30));
 
         dragStagePane.getChildren().addAll(whiteRectangle, appNameText);
 

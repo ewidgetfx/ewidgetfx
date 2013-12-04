@@ -21,16 +21,15 @@ import org.ewidgetfx.applauncher.apptrayfx.iconswipelist.IconSwipeListInfo;
 import org.ewidgetfx.applauncher.apptrayfx.iconswipelist.IconSwipeListPane;
 import org.ewidgetfx.core.WidgetIcon;
 import org.ewidgetfx.util.DragStagePane;
-import javafx.scene.effect.DropShadowBuilder;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBuilder;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.util.List;
+import javafx.scene.effect.DropShadow;
 
 /**
  *
@@ -46,18 +45,17 @@ public final class HorizontalAppTray extends AppTray {
 
     public void init() {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
-        Text appNameText = TextBuilder.create()
-                .x(100)
-                .y(150)
-                .fill(Color.YELLOW)
-                .effect(DropShadowBuilder.create()
-                        .offsetX(2.0)
-                        .offsetY(2.0)
-                        .color(Color.rgb(50, 50, 50, .588))
-                        .build()
-                )
-                .font(Font.font("Serif", 20))
-                .build();
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setColor(Color.rgb(50, 50, 50, .588));
+        dropShadow.setOffsetX(2.0);
+        dropShadow.setOffsetY(2.0);
+
+        Text appNameText = new Text();
+        appNameText.setX(100);
+        appNameText.setY(150);
+        appNameText.setFill(Color.YELLOW);
+        appNameText.setFont(Font.font("Serif", 20));
+        appNameText.setEffect(dropShadow);
 
         List<WidgetIcon> nodes = buildIcons2(primaryStage, new Dimension2D(50, 50), appNameText);
         // Horizontal icon list

@@ -56,7 +56,7 @@ public class VerticalTabPane extends StackPane {
         setPrefHeight(prefHeight);
         // when user mouse pressed the app icon.
         filterMousePressed = (mouseEvent) -> {
-         
+
             //if (mouseEvent.getSource() instanceof VerticalTab) {
             Point2D pt = new Point2D(mouseEvent.getX(), mouseEvent.getY());
             tabs.stream().filter((tab) -> (tab.getTabRectangle().contains(pt) && mouseEvent.getX() < VerticalTab.TAB_WIDTH)).filter((tab) -> (selectIndex != tab.getSelectIndex())).map((tab) -> {

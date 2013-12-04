@@ -24,7 +24,6 @@ import javafx.scene.shape.RectangleBuilder;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextBuilder;
 import javafx.scene.transform.Transform;
 
 import java.util.ArrayList;
@@ -103,14 +102,11 @@ public class VerticalTab extends Pane {
         // add the text of the tab last
         double topTabY = selectIndex * TAB_HEIGHT + (3 * (selectIndex + 1));
         double bottomTextY = topTabY + TAB_HEIGHT - (3 * (selectIndex + 1));
-        Text text = TextBuilder.create()
-                .text(name)
-                .font(Font.font("SanSerif", 13))
-                .stroke(Color.WHITE)
-                .fill(Color.WHITE)
-                .x(TAB_WIDTH - 6)
-                .y(bottomTextY)
-                .build();
+        Text text = new Text(TAB_WIDTH - 6,bottomTextY,  name);
+        text.setFont(Font.font("SanSerif", 13));
+        text.setStroke(Color.WHITE);
+        text.setFill(Color.WHITE);
+        
         text.getTransforms().add(Transform.rotate(-90, TAB_WIDTH - 6, bottomTextY));
         getChildren().add(text);
     }

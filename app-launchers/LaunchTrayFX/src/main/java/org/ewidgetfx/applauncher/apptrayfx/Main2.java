@@ -316,10 +316,10 @@ public class Main2 extends Application {
         final File libsDir = new File(new File(".").getAbsoluteFile().getParentFile() + File.separator + widgetPath + File.separator + libsPath);
 
         if (!widgetDir.exists()) {
-            boolean created = widgetDir.mkdirs();
+            widgetDir.mkdirs();
         }
         if (!libsDir.exists()) {
-            boolean created = libsDir.mkdirs();
+            libsDir.mkdirs();
         }
 
         // extract jars from classpath.
