@@ -28,13 +28,13 @@ import java.util.List;
  * @author Carl Dea <carl.dea@gmail.com>
  * @since 1.0
  */
-public class TileSelector extends Control {
+public final class TileSelector extends Control {
 
     protected static final String DEFAULT_STYLE_CLASS = "tile-selector";
     protected List<KeyBinding> keyBindingList = FXCollections.observableList(new ArrayList<KeyBinding>());
-    private SimpleIntegerProperty numRows = new SimpleIntegerProperty(2);
-    private SimpleIntegerProperty numCols = new SimpleIntegerProperty(2);
-    private SimpleIntegerProperty cellNumber = new SimpleIntegerProperty(1);
+    private final SimpleIntegerProperty numRows = new SimpleIntegerProperty(2);
+    private final SimpleIntegerProperty numCols = new SimpleIntegerProperty(2);
+    private final SimpleIntegerProperty cellNumber = new SimpleIntegerProperty(1);
 
     public TileSelector() {
         init();

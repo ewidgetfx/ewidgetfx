@@ -29,6 +29,7 @@ import javafx.scene.transform.Transform;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -37,15 +38,17 @@ import java.util.List;
  */
 public class VerticalTab extends Pane {
 
+    private static final Logger logger = Logger.getLogger(VerticalTab.class);
+
     private String name;
-    private VerticalTabPane parent;
+    private final VerticalTabPane parent;
     private Pane content;
     private int selectIndex;
     public static int TAB_HEIGHT = 80;
     public static int TAB_WIDTH = 20;
-    private Shape tabRectangle;
-    private Shape tabContentShape;
-    private List<Node> contentChildren = new ArrayList<>();
+    private final Shape tabRectangle;
+    private final Shape tabContentShape;
+    private final List<Node> contentChildren = new ArrayList<>();
     protected Group group = new Group();
 
     public VerticalTab(String name, int selectIndex, VerticalTabPane parent) {
@@ -94,7 +97,7 @@ public class VerticalTab extends Pane {
         // build content region
         getChildren().add(group);
         group.setOnMousePressed((me) -> {
-            System.out.println("Tab pressed " + selectIndex);
+            logger.info("Tab pressed " + selectIndex);
         });
 
         // add the text of the tab last
@@ -153,7 +156,6 @@ public class VerticalTab extends Pane {
     }
 
     public void unselect() {
-        //System.out.println("-----> unselected " + getName());
         content.getChildren().removeAll(contentChildren);
         // display tab rectangle
         getTabRectangle().setVisible(true);
@@ -164,7 +166,6 @@ public class VerticalTab extends Pane {
     }
 
     public void select() {
-        //System.out.println("-----> selected " + getName());
         if (!content.getChildren().containsAll(contentChildren)) {
             content.getChildren().addAll(contentChildren);
         }

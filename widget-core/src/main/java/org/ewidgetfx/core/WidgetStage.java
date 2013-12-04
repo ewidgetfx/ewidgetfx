@@ -352,6 +352,6 @@ public final class WidgetStage extends Stage {
 
         widget.getAsNode().getChildren().clear();
         this.widget = null;
-        //System.out.println("stage's close");
+
     }
 }

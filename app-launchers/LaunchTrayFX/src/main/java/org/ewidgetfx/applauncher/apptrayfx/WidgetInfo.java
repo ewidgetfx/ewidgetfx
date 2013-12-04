@@ -18,16 +18,17 @@ package org.ewidgetfx.applauncher.apptrayfx;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 
- /**
+/**
  *
  * @author Carl Dea <carl.dea@gmail.com>
  * @since 1.0
  */
 public class WidgetInfo {
-    private SimpleDoubleProperty savedX = new SimpleDoubleProperty();
-    private SimpleDoubleProperty savedY = new SimpleDoubleProperty();
-    private SimpleDoubleProperty currentX = new SimpleDoubleProperty();
-    private SimpleDoubleProperty currentY = new SimpleDoubleProperty();
+
+    private final SimpleDoubleProperty savedX = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty savedY = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty currentX = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty currentY = new SimpleDoubleProperty();
     private ChangeListener<Number> currentXChangeListener;
     private ChangeListener<Number> currentYChangeListener;
 

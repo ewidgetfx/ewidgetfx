@@ -170,7 +170,7 @@ public class WidgetIcon<B extends Node> extends HBox {
         double surfaceWidth = getPrefWidth();
         double surfaceHeight = getPrefHeight();
         BADGE_POS badge_pos = getBadgePosition();
-        //System.out.println("surfaceWidth: " + surfaceWidth + " surfaceHeight: " + surfaceHeight );
+
         switch (badge_pos) {
             case N:
                 badgeIndicator.setLayoutX((surfaceWidth - w) / 2);

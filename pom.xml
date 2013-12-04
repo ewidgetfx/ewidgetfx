@@ -19,7 +19,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 
         <junit.version>4.11</junit.version>
-        <log4j.version>1.2.16</log4j.version>
+        <log4j.version>1.2.17</log4j.version>
 
     </properties>
     

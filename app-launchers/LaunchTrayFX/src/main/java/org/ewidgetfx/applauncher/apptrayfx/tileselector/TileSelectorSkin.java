@@ -16,7 +16,6 @@
 package org.ewidgetfx.applauncher.apptrayfx.tileselector;
 
 import com.sun.javafx.scene.control.skin.BehaviorSkinBase;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -28,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.HashMap;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -36,9 +36,11 @@ import java.util.HashMap;
  */
 public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelectorBehavior> {
 
+    private static final Logger logger = Logger.getLogger(TileSelectorSkin.class);
+
     private boolean isDirty;
     private boolean initialized;
-    private HashMap<String, Node> tileNodeMap = new HashMap<>();
+    private final HashMap<String, Node> tileNodeMap = new HashMap<>();
 
     public TileSelectorSkin(final TileSelector tileSelector) {
         super(tileSelector, new TileSelectorBehavior(tileSelector));
@@ -48,7 +50,7 @@ public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelecto
     }
 
     private void init() {
-        System.out.println(this.getClass().getName() + " init()");
+        logger.info(this.getClass().getName() + " init()");
         TileSelector control = getSkinnable();
 
         //setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -60,12 +62,12 @@ public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelecto
 
     @Override
     protected void handleControlPropertyChanged(final String PROPERTY) {
-        System.out.println(this.getClass().getName() + " handleControlPropertyChanged()");
+        logger.info(this.getClass().getName() + " handleControlPropertyChanged()");
         super.handleControlPropertyChanged(PROPERTY);
     }
 
     public final void repaint() {
-        System.out.println(this.getClass().getName() + " repaint()");
+        logger.info(this.getClass().getName() + " repaint()");
         isDirty = true;
         getSkinnable().requestLayout();
     }
@@ -77,7 +79,7 @@ public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelecto
         if (!isDirty) {
             return;
         }
-        System.out.println(this.getClass().getName() + " layoutChildren()");
+        logger.info(this.getClass().getName() + " layoutChildren()");
         if (!initialized) {
             init();
         }
@@ -89,12 +91,12 @@ public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelecto
 
     @Override
     public void dispose() {
-        System.out.println(this.getClass().getName() + " dispose()");
+        logger.info(this.getClass().getName() + " dispose()");
         getChildren().clear();
     }
 
     private void addHandlers() {
-        System.out.println(this.getClass().getName() + " addHandlers()");
+        logger.info(this.getClass().getName() + " addHandlers()");
 //        // MouseEvents
 //        setOnMousePressed(mouseHandler);
 //        setOnMouseDragged(mouseHandler);
@@ -107,7 +109,7 @@ public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelecto
 
     // ******************** Drawing related ***********************************
     private void drawControl() {
-        System.out.println(this.getClass().getName() + " drawControl()");
+        logger.info(this.getClass().getName() + " drawControl()");
         getChildren().clear();
         TileSelector control = getSkinnable();
 //        final double WIDTH          = control.getPrefWidth();
@@ -181,34 +183,27 @@ public class TileSelectorSkin extends BehaviorSkinBase<TileSelector, TileSelecto
         newCellLabel.getStyleClass().add("selected-label");
         control.cellNumberProperty().set(1);
 
-        control.cellNumberProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldCell, Number newCell) {
-
-                // set cell
-                HBox oldCellHBox = (HBox) tileNodeMap.get("tile-selector-hbox-" + oldCell.intValue());
-                HBox newCellHBox = (HBox) tileNodeMap.get("tile-selector-hbox-" + newCell.intValue());
-                if (oldCellHBox != null) {
-                    oldCellHBox.getStyleClass().clear();
-                    oldCellHBox.getStyleClass().add("hbox");
-                    oldCellHBox.getStyleClass().add("tile-selector hbox:pressed");
-                    oldCellHBox.getStyleClass().add("tile-selector hbox:hover");
-                }
-                newCellHBox.getStyleClass().clear();
-                newCellHBox.getStyleClass().add("selected-hbox");
-                newCellHBox.getStyleClass().add("tile-selector hbox:pressed");
-                newCellHBox.getStyleClass().add("tile-selector hbox:hover");
-
-                // set label
-                Label oldCellLabel = (Label) tileNodeMap.get("tile-selector-label-" + oldCell.intValue());
-                Label newCellLabel = (Label) tileNodeMap.get("tile-selector-label-" + newCell.intValue());
-                if (oldCellLabel != null) {
-                    oldCellLabel.getStyleClass().clear();
-                    oldCellLabel.getStyleClass().add("label");
-                }
-                newCellLabel.getStyleClass().clear();
-                newCellLabel.getStyleClass().add("selected-label");
+        control.cellNumberProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldCell, Number newCell) -> {
+            HBox oldCellHBox = (HBox) tileNodeMap.get("tile-selector-hbox-" + oldCell.intValue());
+            HBox newCellHBox1 = (HBox) tileNodeMap.get("tile-selector-hbox-" + newCell.intValue());
+            if (oldCellHBox != null) {
+                oldCellHBox.getStyleClass().clear();
+                oldCellHBox.getStyleClass().add("hbox");
+                oldCellHBox.getStyleClass().add("tile-selector hbox:pressed");
+                oldCellHBox.getStyleClass().add("tile-selector hbox:hover");
             }
+            newCellHBox1.getStyleClass().clear();
+            newCellHBox1.getStyleClass().add("selected-hbox");
+            newCellHBox1.getStyleClass().add("tile-selector hbox:pressed");
+            newCellHBox1.getStyleClass().add("tile-selector hbox:hover");
+            Label oldCellLabel = (Label) tileNodeMap.get("tile-selector-label-" + oldCell.intValue());
+            Label newCellLabel1 = (Label) tileNodeMap.get("tile-selector-label-" + newCell.intValue());
+            if (oldCellLabel != null) {
+                oldCellLabel.getStyleClass().clear();
+                oldCellLabel.getStyleClass().add("label");
+            }
+            newCellLabel1.getStyleClass().clear();
+            newCellLabel1.getStyleClass().add("selected-label");
         });
 
         getChildren().add(gridPane);
