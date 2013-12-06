@@ -17,3 +17,4 @@ target/
 *.swp
 .idea
 nb-configuration.xml
+.LCKpom.xml~
