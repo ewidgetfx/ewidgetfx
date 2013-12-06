@@ -71,7 +71,7 @@
                             <classpathPrefix>jabs/libs</classpathPrefix>
                         </manifest>
                         <manifestEntries>
-                            <widget-name>AbacusWidget</widget-name>
+                            <widget-name>ConferenceTour Widget</widget-name>
                             <widget-version>${project.version}</widget-version>
                             <!--
                              public static enum DECORATION {
@@ -88,7 +88,7 @@
                             -->
                             <widget-decoration>STAGED_CLOSE</widget-decoration>
                             <widget-type>WIDGET</widget-type> <!-- NATIVE_APP, WIDGET or SHELL_SCRIPT-->
-                            <widget-description>Abacus Widget</widget-description>
+                            <widget-description>ConferenceTour Widget</widget-description>
                             <widget-vendor>CarlFX</widget-vendor>
                             <widget-vendor-url>carlfx.wordpress.com</widget-vendor-url>
                             <widget-vendor-email></widget-vendor-email>
