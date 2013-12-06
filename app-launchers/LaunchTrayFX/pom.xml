@@ -155,6 +155,7 @@ A libs directory will also be created containing jar dependencies such as widget
             <groupId>org.ewidgetfx</groupId>
             <artifactId>widget-core</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
