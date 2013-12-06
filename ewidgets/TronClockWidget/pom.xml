@@ -74,77 +74,55 @@
 			<!-- 
 				Copies widget core into a directory libs
 				
-				mvn clean package dependency:copy-dependencies
-			-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.8</version>
-                    <executions>
-                        <execution>
-                            <id>copy-dependencies</id>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>copy-dependencies</goal>
-                            </goals>
-                            <configuration>
-                                <excludeGroupIds>org.ewidgetfx</excludeGroupIds>
-                                <excludeArtifactIds>widget-core</excludeArtifactIds>
-                                <outputDirectory>${outputDirectory}/classes</outputDirectory>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>copy-dependencies2</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>copy-dependencies</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${outputDirectory}/jabs/libs</outputDirectory>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
+                    mvn clean package dependency:copy-dependencies
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeGroupIds>org.ewidgetfx</excludeGroupIds>
+                            <excludeArtifactIds>widget-core</excludeArtifactIds>
+                            <outputDirectory>${outputDirectory}/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies2</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${outputDirectory}/jabs/libs</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-				<!-- documentation and test reports-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration><testFailureIgnore>true</testFailureIgnore></configuration>
-                </plugin>
-
-				<!-- Ant task abilities -->
-				<plugin>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.7</version>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<configuration>
-							  <target>
-
-								<!--
-								  // ant tasks
-								-->
-
-							  </target>
-							</configuration>
-							<goals>
-							  <goal>run</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-            </plugins>
+            <!-- documentation and test reports-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+        </plugins>
 
     </build>
     <dependencies>
-		<dependency>
+        <dependency>
             <groupId>org.ewidgetfx</groupId>
             <artifactId>widget-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 
