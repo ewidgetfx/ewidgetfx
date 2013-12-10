@@ -1,3 +1,5 @@
+
+# Java Clas Files #
 *.class
 
 # Package Files #
@@ -5,16 +7,24 @@
 *.war
 *.ear
 
+# IDE Files #
 .classpath
 .project
 .settings
-.DS_Store
-dist/
-target/
 *.iml
 *.ipr
 *.iws
 *.swp
 .idea
 nb-configuration.xml
+
+# OS Specific folders/Files#
+.DS_Store
+
+# Build tool specific files/Folders #
+.gradle/
+dist/
+build/
+target/
+
 .LCKpom.xml~
