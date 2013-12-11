@@ -1,0 +1,3 @@
+include 'widget-core','app-launchers','aewidgets'
+include 'app-launchers:LaunchTrayFX'
+include 'ewidgets:GoogleWeather', 'ewidgets:HelloWorldWidget', ':ewidgets:Pidget', 'ewidgets:Ticker', 'ewidgets:TronClockWidget', ':ewidgets:Abacus'

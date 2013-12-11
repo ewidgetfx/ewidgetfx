@@ -1,0 +1,231 @@
+
+def libraries= [
+                'junit': 'junit:junit:4.11', 
+                'log4j' : 'log4j:log4j:1.2.17',
+                'twitter4j': 'org.twitter4j:twitter4j-core:3.0.5', 
+                'facebook4j': 'org.facebook4j:facebook4j-core:2.0.2'
+             ]
+
+def widgetName = ''
+
+defaultTasks 'clean', 'install'
+
+allprojects {
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.ewidgetfx'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+    repositories {  
+        mavenCentral() 
+        mavenLocal()
+    }
+
+    dependencies {  
+
+            compile libraries['log4j'] 
+            testCompile libraries['junit']
+    }
+}
+
+
+
+project(':app-launchers:LaunchTrayFX') {
+
+    apply plugin: 'application'
+
+    mainClassName = 'org.ewidgetfx.applauncher.apptrayfx.Main2'
+
+    dependencies {  compile project(':widget-core')  }
+
+
+
+
+}
+
+project(':ewidgets') {
+
+    subprojects {
+    	dependencies {	compile project(':widget-core')  }
+
+        jar {
+              manifest {
+                attributes  'widget-name': widgetName
+              }
+        }
+    }
+}
+
+
+project(':ewidgets:Ticker') {
+
+    widgetName = 'tronclock'
+
+    repositories {
+
+    	   maven { 
+                url "http://twitter4j.org/maven2" 
+            }
+    }
+
+    configurations {
+          compileOnly
+      }
+
+      sourceSets {
+          main {
+            compileClasspath += configurations.compileOnly
+          }
+          test {
+            compileClasspath += configurations.compileOnly
+          }
+}
+
+    dependencies {
+        compileOnly libraries['twitter4j'], libraries['facebook4j']
+    }
+
+/*  jar{ widgetManifest('tronclock','1.0-SNAPSHOT','STAGED_CLOSE','WIDGET','Tron Clock using the JavaFX Canvas API',
+    '','','','org.ewidgetfx.widget.tronclock.TronClockWidget' ) }
+*/
+
+     jar {
+     
+
+      into('') {
+        
+        from configurations.compileOnly
+    }
+          manifest {
+            attributes (  'widget-name': 'tronclock',
+              'widget-version': '1.0-SNAPSHOT',
+              'widget-decoration': 'STAGED_CLOSE',
+              'widget-type': 'WIDGET',
+              'widget-description': 'Tron Clock using the JavaFX Canvas API',
+              'widget-vendor': '',
+              'widget-vendor-url': '',
+              'widget-vendor-email': '',
+              'widget-execution-line': 'org.ewidgetfx.widget.tronclock.TronClockWidget',
+              'Class-Path': configurations.compileOnly.collect { it.getName() }.join(' ') 
+            )
+
+
+         }
+     }
+}
+
+project(':ewidgets:Abacus') {
+
+     jar {
+          manifest {
+            attributes(  'widget-name': 'AbacusWidget',
+              'widget-version': project.version,
+              'widget-decoration': 'STAGED_CLOSE',
+              'widget-type': 'WIDGET',
+              'widget-description': 'Abacus Widget',
+              'widget-vendor': 'CarlFX',
+              'widget-vendor-url': 'carlfx.wordpress.com',
+              'widget-vendor-email': '',
+              'widget-execution-line': 'org.ewidgetfx.widget.abacus.AbacusWidget'
+            )
+         }
+     }
+}
+
+project(':ewidgets:GoogleWeather') {
+    
+     jar {
+          manifest {
+            attributes(  'widget-name': 'GoogleWeather',
+              'widget-version': project.version,
+              'widget-decoration': 'STAGED_CLOSE',
+              'widget-type': 'WIDGET',
+              'widget-description': 'A Weather map',
+              'widget-vendor': 'CarlFX',
+              'widget-vendor-url': 'carlfx.wordpress.com',
+              'widget-vendor-email': '',
+              'widget-execution-line': 'org.carlfx.widget.googleweather.GoogleWeatherWidget'
+            )
+         }
+     }
+}
+
+project(':ewidgets:HelloWorldWidget') {
+    
+     jar {
+          manifest {
+            attributes(  'widget-name': 'Hello World',
+              'widget-version': project.version,
+              'widget-decoration': 'STAGED_CLOSE',
+              'widget-type': 'WIDGET',
+              'widget-description': 'A Hello World widget.',
+              'widget-vendor': 'CarlFX',
+              'widget-vendor-url': 'carlfx.wordpress.com',
+              'widget-vendor-email': '',
+              'widget-execution-line': 'org.ewidgetfx.widget.helloworld.HelloWorldWidget'
+            )
+         }
+     }
+}
+
+project(':ewidgets:Pidget') {
+    
+     jar {
+          manifest {
+            attributes(  'widget-name': 'Pidget',
+              'widget-version': project.version,
+              'widget-decoration': 'STAGED_CLOSE',
+              'widget-type': 'WIDGET',
+              'widget-description': 'Picture widget for eWidgetFX',
+              'widget-vendor': 'The Hecklers',
+              'widget-vendor-url': 'www.thehecklers.org',
+              'widget-vendor-email': 'mark@thehecklers.org',
+              'widget-execution-line': 'org.thehecklers.Pidget'
+            )
+         }
+     }
+}
+
+project(':ewidgets:TronClockWidget') {
+    
+     jar {
+          manifest {
+            attributes(  'widget-name': 'TronClockWidget',
+              'widget-version': project.version,
+              'widget-decoration': 'STAGED_CLOSE',
+              'widget-type': 'WIDGET',
+              'widget-description': 'Tron Clock using the JavaFX Canvas API',
+              'widget-vendor': 'CarlFX',
+              'widget-vendor-url': 'carlfx.wordpress.com',
+              'widget-vendor-email': '',
+              'widget-execution-line': 'org.ewidgetfx.widget.tronclock.TronClockWidget'
+            )
+         }
+     }
+}
+
+
+
+
+
+
+def widgetManifest (name, version, decoration, type, desc, vendor, url,email, esecline) {
+
+    manifest {
+        attributes  'widget-name': name 
+        attributes  'widget-version': version
+        attributes  'widget-decoration': decoration
+        attributes  'widget-type': type
+        attributes  'widget-description': desc
+        attributes  'widget-vendor': vendor
+        attributes  'widget-vendor-url': 'url'
+        attributes  'widget-vendor-email': email
+        attributes  'widget-execution-line': esecline
+     }
+}
+
